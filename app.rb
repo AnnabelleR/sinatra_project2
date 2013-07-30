@@ -6,11 +6,12 @@ require 'json'
 # that is pasted into the text area.
 
 # The word_cloud.erb file expects a variable called
-# @words_with_frequencies. This should be a JSON hash.
+# @words_with_frequencies. This should be a JSON array of
+# arrays.
 #
 # As a simple example of something with the right format:
 #
-# @words_with_frequencies = {'love'=>5, 'coding'=>4}.to_json
+# @words_with_frequencies = [['love',5], ['coding',4]].to_json
 
 get '/' do
     
