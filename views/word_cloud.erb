@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="d3-cloud/lib/d3/d3.js"></script>
+<script src="d3-cloud/d3.layout.cloud.js"></script>
+</head>
+<body>
+<script>
+  var words_with_frequencies = <%= @words_with_frequencies %>;
+
+  // another fill option:
+ // var fill = d3.scale.category20b();
+  var fill = d3.scale.linear().domain([1,60]).range(['#aaa', '#222']);
+  d3.layout.cloud().size([1000, 600])
+      .words(words_with_frequencies.map(function(d) {
+        return {text: d[0], size: 30* d[1]};
+      }))
+      .padding(5)
+      .rotate(function() { return 0; })
+      .font("Impact")
+      .fontSize(function(d) { return Math.sqrt(d.size)*3; })
+      .on("end", draw)
+      .start();
+
+  function draw(words) {
+    d3.select("body").append("svg")
+        .attr("width", 1000)
+        .attr("height", 600)
+      .append("g")
+        .attr("transform", "translate(500,300)")
+      .selectAll("text")
+        .data(words)
+      .enter().append("text")
+        .style("font-size", function(d) { return d.size + "px"; })
+        .style("font-family", "Impact")
+        .style("fill", function(d, i) { return fill(d.size); })
+        .attr("text-anchor", "middle")
+        .attr("transform", function(d) {
+          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+        })
+        .text(function(d) { return d.text; });
+  }
+
+</script>
+</body>
+</html>
